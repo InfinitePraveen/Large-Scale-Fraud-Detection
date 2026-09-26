@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Large-Scale Fraud Detection</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="container">
+    <header>
+      <p class="eyebrow">REAL-TIME FRAUD DEMO</p>
+      <h1>Transaction Risk Scoring</h1>
+      <p class="subtitle">
+        A lightweight demonstration of online features + ML scoring.
+      </p>
+    </header>
+
+    <section class="card">
+      <form method="post">
+        <div class="grid">
+          <label>User ID
+            <input name="user_id" value="demo_user_001">
+          </label>
+          <label>Purchase value
+            <input type="number" name="purchase_value" value="75" step="0.01">
+          </label>
+          <label>Age
+            <input type="number" name="age" value="35">
+          </label>
+          <label>Transaction hour
+            <input type="number" name="hour" value="14" min="0" max="23">
+          </label>
+          <label>Day of week
+            <input type="number" name="dayofweek" value="2" min="0" max="6">
+          </label>
+          <label>Known devices
+            <input type="number" name="device_seen_count" value="2" min="0">
+          </label>
+          <label>New device
+            <select name="new_device">
+              <option value="0">No</option>
+              <option value="1">Yes</option>
+            </select>
+          </label>
+          <label>High-risk source
+            <select name="high_risk_source">
+              <option value="0">No</option>
+              <option value="1">Yes</option>
+            </select>
+          </label>
+        </div>
+        <button type="submit">Score Transaction</button>
+      </form>
+    </section>
+
+    {% if result %}
+    <section class="result">
+      <div>
+        <p class="eyebrow">MODEL DECISION</p>
+        <h2>{{ result.decision }}</h2>
+        <p>User: <strong>{{ result.user_id }}</strong></p>
+      </div>
+      <div class="score">
+        <span>Fraud probability</span>
+        <strong>{{ "%.2f"|format(result.probability * 100) }}%</strong>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>Online features used for this decision</h3>
+      <div class="feature-grid">
+        {% for key, value in result.features.items() %}
+        <div><span>{{ key }}</span><strong>{{ value }}</strong></div>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+
+    <footer>
+      <a href="https://github.com/InfinitePraveen" target="_blank">GitHub</a>
+      <a href="https://www.linkedin.com/in/infinitepraveen/" target="_blank">LinkedIn</a>
+    </footer>
+  </main>
+</body>
+</html>
